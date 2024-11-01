@@ -1,0 +1,27 @@
+{
+  "name": "larngear24-passport-backend",
+  "version": "1.0.50",
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "build": "bun build src/index.ts --target bun --outdir ./dist",
+    "start": "NODE_ENV=production bun dist/index.js",
+    "start:migrate:prod": "prisma generate && prisma migrate deploy && bun run start",
+    "test": "bun test",
+    "db:generate": "prisma migrate dev",
+    "db:migrate": "prisma migrate deploy",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@elysiajs/swagger": "^1.1.5",
+    "@prisma/client": "^5.21.1",
+    "elysia": "latest"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "prisma": "^5.21.1",
+    "tsx": "^4.19.2"
+  },
+  "module": "src/index.js"
+}
