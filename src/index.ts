@@ -1,30 +1,11 @@
 import swagger from "@elysiajs/swagger";
-import { Prisma, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { Elysia } from "elysia";
 
 const prisma = new PrismaClient();
 
-async function getAccount() {
-  const account = await prisma.accounts.findMany({});
-  return account;
-}
-
-async function createAccount() {
-  const account = await prisma.accounts.create({
-    data: {
-      email: "random127",
-      password: "password",
-      username: "random127",
-      created_on: new Date(),
-    },
-  });
-  return account;
-}
-
 const users = new Elysia({ prefix: "/users" })
   .get("/", () => "Users")
-  .get("/account", getAccount)
-  .get("/create", createAccount)
   .get("/profile", "Profile")
   .get("/settings", "Settings");
 
