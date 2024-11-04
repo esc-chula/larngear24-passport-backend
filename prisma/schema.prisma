@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  user_id    BigInt       @id @default(autoincrement()) @db.BigInt
+  username   String       @db.VarChar(255)
+  baan       Int          @db.Integer
+  email      String       @db.VarChar(255)
+  user_item  user_item[]
+  user_dress user_dress[]
+}
+
+model item {
+  item_id   BigInt      @id @default(autoincrement()) @db.BigInt
+  item_name String      @db.VarChar(255)
+  user_item user_item[]
+}
+
+model user_item {
+  user_item_id BigInt @id @default(autoincrement()) @db.BigInt
+  user_id      BigInt
+  item_id      BigInt
+  item         item   @relation(fields: [item_id], references: [item_id])
+  user         user   @relation(fields: [user_id], references: [user_id])
+}
+
+model dress {
+  dress_id   BigInt       @id @default(autoincrement()) @db.BigInt
+  dress_name String
+  user_dress user_dress[]
+}
+
+model user_dress {
+  user_dress_id BigInt @id @default(autoincrement()) @db.BigInt
+  user_id       BigInt
+  dress_id      BigInt
+  dress         dress  @relation(fields: [dress_id], references: [dress_id])
+  user          user   @relation(fields: [user_id], references: [user_id])
+}
