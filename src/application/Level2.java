@@ -37,7 +37,7 @@ public class Level2 implements BaseLevel {
 		if(singingIdols.size()==0) {
 			System.out.println("Unluckily, all of your idols cannot sing.");
 
-		    System.out.println("Press any keys to continue.");
+		    System.out.println("Press any key to continue.");
 			scanner.nextLine();
 		} else {
 			int option = -1;
