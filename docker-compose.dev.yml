@@ -1,0 +1,14 @@
+services:
+  database:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - lg-db:/var/lib/postgresql/data
+
+volumes:
+  lg-db:
