@@ -3,7 +3,7 @@ import { Elysia, t } from "elysia";
 import prisma from "@/libs/prisma";
 
 export const authService = new Elysia({ prefix: "/auth" }).post(
-  "/signin",
+  "/sign-in",
   async ({ body, set }) => {
     try {
       const user = await prisma.user.findUnique({
