@@ -11,7 +11,7 @@ export async function getUserId(sessionId: string) {
   });
 
   if (!user) {
-    throw new Error("Session not found");
+    throw new Error("Invalid Session");
   }
 
   return user.userId;
@@ -27,7 +27,7 @@ export async function getUser(sessionId: string) {
   });
 
   if (!user) {
-    throw new Error("User not found");
+    throw new Error("Invalid User");
   }
 
   return user;

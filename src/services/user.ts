@@ -4,7 +4,10 @@ import prisma from "@/libs/prisma";
 import { getUser } from "@/utils/user";
 import { bigIntReplacer } from "@/utils/replacer";
 
+import { authorizationModel } from "@/models/authorization";
+
 export const userService = new Elysia({ prefix: "/user" })
+  .use(authorizationModel)
   .onBeforeHandle(async ({ headers, set }) => {
     if (!headers.authorization) {
       set.status = "Unauthorized";
@@ -16,25 +19,21 @@ export const userService = new Elysia({ prefix: "/user" })
       return { message: "Invalid authorization header" };
     }
   })
-  .get(
-    "/profile",
-    async ({ headers, set }) => {
-      try {
-        const sessionId = headers.authorization.split(" ")[1];
-        const user = await getUser(sessionId);
+  .guard({
+    headers: "authorizationHeader",
+  })
+  .get("/profile", async ({ headers, set }) => {
+    try {
+      const sessionId = headers.authorization.split(" ")[1];
+      const user = await getUser(sessionId);
 
-        return JSON.stringify(user, bigIntReplacer);
-      } catch (error) {
-        set.status = "Internal Server Error";
-        return { message: "Internal Server Error" };
-      }
-    },
-    {
-      headers: t.Object({
-        authorization: t.String(),
-      }),
+      return JSON.stringify(user, bigIntReplacer);
+    } catch (error) {
+      console.error(error, JSON.stringify(error));
+      set.status = "Internal Server Error";
+      return { message: "Internal Server Error" };
     }
-  )
+  })
   .patch(
     "/username",
     async ({ body, headers, set }) => {
@@ -58,9 +57,6 @@ export const userService = new Elysia({ prefix: "/user" })
       }
     },
     {
-      headers: t.Object({
-        authorization: t.String(),
-      }),
       body: t.Object({
         username: t.String(),
       }),
