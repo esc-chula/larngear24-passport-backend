@@ -2,15 +2,11 @@
 
 ## Getting Started
 
-To get started with this template, simply paste this command into your terminal:
+First, copy `.env.template` to `.env` and fill in the required environment variables.
 
-```bash
-bun create elysia ./elysia-example
-```
+### Creating the database
 
-## Development
-
-This service require database to run locally. To start the database run:
+Second, make sure that Docker is installed as this service require database to run locally. To start the database run:
 
 ```bash
 docker compose -f ./docker/docker-compose.dev.yaml up
@@ -32,10 +28,15 @@ bunx prisma migrate dev
 **Note:** You can also run `bunx prisma studio` to open the Prisma Studio to see the database.
 Note2: `prisma migrate dev` can reset the database, so be careful when running this command.
 
-To start the development server run:
+### To install dependencies run
 
 ```bash
 bun install
+```
+
+### To start the development server run
+
+```bash
 bun run dev
 ```
 
