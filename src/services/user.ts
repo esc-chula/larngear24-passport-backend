@@ -1,31 +1,28 @@
 import { Elysia, t } from "elysia";
 
 import prisma from "@/libs/prisma";
-import { getUser } from "@/utils/user";
+import { getUser, getUserId } from "@/utils/user";
 import { bigIntReplacer } from "@/utils/replacer";
 
 import { authorizationModel } from "@/models/authorization";
 
 export const userService = new Elysia({ prefix: "/user" })
   .use(authorizationModel)
-  .onBeforeHandle(async ({ headers, set }) => {
-    if (!headers.authorization) {
-      set.status = "Unauthorized";
-      return { message: "Missing authorization header" };
-    }
-
-    if (!headers.authorization.startsWith("Bearer ")) {
-      set.status = "Unauthorized";
-      return { message: "Invalid authorization header" };
-    }
-  })
   .guard({
     headers: "authorizationHeader",
   })
-  .get("/profile", async ({ headers, set }) => {
+  .derive(async ({ headers }) => {
+    const auth = headers["authorization"];
+    const sessionId = auth?.startsWith("Bearer ") ? auth.slice(7) : null;
+    const userId = (await getUserId(sessionId)) as bigint;
+
+    return {
+      userId,
+    };
+  })
+  .get("/profile", async ({ userId, set }) => {
     try {
-      const sessionId = headers.authorization.split(" ")[1];
-      const user = await getUser(sessionId);
+      const user = await getUser(userId);
 
       return JSON.stringify(user, bigIntReplacer);
     } catch (error) {
@@ -36,10 +33,9 @@ export const userService = new Elysia({ prefix: "/user" })
   })
   .patch(
     "/username",
-    async ({ body, headers, set }) => {
+    async ({ userId, body, set }) => {
       try {
-        const sessionId = headers.authorization.split(" ")[1];
-        const user = await getUser(sessionId);
+        const user = await getUser(userId);
 
         await prisma.user.update({
           where: {

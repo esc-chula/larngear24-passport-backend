@@ -1,6 +1,10 @@
 import prisma from "@/libs/prisma";
 
-export async function getUserId(sessionId: string) {
+export async function getUserId(sessionId: string | null) {
+  if (!sessionId) {
+    throw new Error("Invalid Session");
+  }
+
   const user = await prisma.session.findUnique({
     where: {
       sessionId: sessionId,
@@ -17,9 +21,7 @@ export async function getUserId(sessionId: string) {
   return user.userId;
 }
 
-export async function getUser(sessionId: string) {
-  const userId = await getUserId(sessionId);
-
+export async function getUser(userId: bigint) {
   const user = await prisma.user.findUnique({
     where: {
       user_id: userId,
