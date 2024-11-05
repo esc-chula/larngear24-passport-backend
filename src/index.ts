@@ -1,8 +1,7 @@
-import swagger from "@elysiajs/swagger";
-import { PrismaClient } from "@prisma/client";
 import { Elysia } from "elysia";
+import swagger from "@elysiajs/swagger";
 
-const prisma = new PrismaClient();
+import prisma from "@/libs/prisma";
 
 const users = new Elysia({ prefix: "/users" })
   .get("/", () => "Users")
