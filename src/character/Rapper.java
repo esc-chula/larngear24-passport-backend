@@ -19,7 +19,6 @@ public class Rapper extends Idol implements Rappable{
 		String rapLine = null;
 		if(tier == Tier.NoName) rapLine = "My words are weapons, slicing through the air ⚝";
 		else if(tier == Tier.Global) rapLine = "From the streets to the stage, I’m the voice of the crowd ⚝";
-			
 		System.out.println(getName()+" : "+rapLine);
 	}
 

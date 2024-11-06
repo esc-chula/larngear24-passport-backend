@@ -4,6 +4,7 @@ import character.Rapper;
 import character.Singer;
 
 public enum Tier {
+	
 	Karaoke, LiveMusic, Opera,
 	NoName, Global;
 	
@@ -17,4 +18,5 @@ public enum Tier {
 		if(rapper.getRapPoint()>=20) return Global;
 		else return NoName;
 	}
+	
 }

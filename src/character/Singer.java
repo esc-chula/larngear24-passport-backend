@@ -5,10 +5,9 @@ import logic.Tier;
 import base.Idol;
 
 public class Singer extends Idol implements Singable {
-
+	
 	private int singPoint;
 	private Tier tier;
-	
 	
 	public Singer(String name,int singPoint) {
 		super(name, 0);
@@ -21,7 +20,6 @@ public class Singer extends Idol implements Singable {
 		if(tier==Tier.Karaoke) singLine = "Every note a heartbeat, pulsing in the night ♪";
 		else if(tier==Tier.LiveMusic) singLine = "I’m a symphony of dreams, soaring ever high ♪";
 		else if(tier==Tier.Opera) singLine = "With a voice that echoes, I’m healing all the scars ♪";
-		
 		System.out.println(getName()+" : "+singLine);
 	}
 
@@ -51,7 +49,5 @@ public class Singer extends Idol implements Singable {
 	public void showSingPoint() {
 		System.out.println("Sing point = "+singPoint);
 	}
-
 	
-
 }

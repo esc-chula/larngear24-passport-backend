@@ -8,6 +8,7 @@ import base.Rappable;
 import base.Singable;
 
 public class GameController {
+	
 	public static GameController instance;
 	public ArrayList<Idol> idols;
 	public int auraPoint;
@@ -92,6 +93,5 @@ public class GameController {
 	public void showErrorPoint() {
 		System.out.println("Your error point = "+errorPoint);
 	}
-	
 	
 }

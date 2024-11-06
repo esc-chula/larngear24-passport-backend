@@ -6,11 +6,11 @@ import base.Rappable;
 import base.Singable;
 
 public class SuperIdol extends Idol implements Singable, Danceable, Rappable {
-
+	
 	private int dancePoint;
 	private int singPoint;
 	private int rapPoint;
-	
+
 	public SuperIdol(String name, int dancePoint, int singPoint, int rapPoint) {
 		super(name, 0);
 		setDancePoint(dancePoint);
