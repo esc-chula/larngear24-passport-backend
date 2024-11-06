@@ -1,6 +1,6 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 
-const mockItemData: Prisma.itemCreateInput[] = [
+const mockItemData: Prisma.ItemCreateInput[] = [
   {
     item_id: 1,
     item_name: "1",
@@ -11,7 +11,7 @@ const mockItemData: Prisma.itemCreateInput[] = [
   },
 ];
 
-const mockUserData: Prisma.userCreateInput[] = [
+const mockUserData: Prisma.UserCreateInput[] = [
   {
     user_id: 1,
     email: "john@example.com",
@@ -20,7 +20,7 @@ const mockUserData: Prisma.userCreateInput[] = [
   },
 ];
 
-const mockDressData: Prisma.dressCreateInput[] = [
+const mockDressData: Prisma.DressCreateInput[] = [
   {
     dress_id: 1,
     dress_name: "1",
@@ -71,12 +71,12 @@ async function main() {
   });
   console.log("Created dresses: ", dresses);
 
-  const userItems = await prisma.user_item.createMany({
+  const userItems = await prisma.user_Item.createMany({
     data: mockItemUserData,
   });
   console.log("Created item_users: ", userItems);
 
-  const userDresses = await prisma.user_dress.createMany({
+  const userDresses = await prisma.user_Dress.createMany({
     data: mockUserDressData,
   });
   console.log("Created user_dresses: ", userDresses);

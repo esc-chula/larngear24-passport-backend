@@ -7,39 +7,44 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user {
-  user_id    BigInt       @id @default(autoincrement()) @db.BigInt
+model User {
+  user_id    BigInt       @id @unique @default(autoincrement()) @db.BigInt
   username   String       @db.VarChar(255)
   baan       Int          @db.Integer
-  email      String       @db.VarChar(255)
-  user_item  user_item[]
-  user_dress user_dress[]
+  email      String       @unique @db.VarChar(255)
+  user_item  User_Item[]
+  user_dress User_Dress[]
 }
 
-model item {
+model Item {
   item_id   BigInt      @id @default(autoincrement()) @db.BigInt
   item_name String      @db.VarChar(255)
-  user_item user_item[]
+  user_item User_Item[]
 }
 
-model user_item {
+model User_Item {
   user_item_id BigInt @id @default(autoincrement()) @db.BigInt
   user_id      BigInt
   item_id      BigInt
-  item         item   @relation(fields: [item_id], references: [item_id])
-  user         user   @relation(fields: [user_id], references: [user_id])
+  item         Item   @relation(fields: [item_id], references: [item_id])
+  user         User   @relation(fields: [user_id], references: [user_id])
 }
 
-model dress {
+model Dress {
   dress_id   BigInt       @id @default(autoincrement()) @db.BigInt
   dress_name String
-  user_dress user_dress[]
+  user_dress User_Dress[]
 }
 
-model user_dress {
+model User_Dress {
   user_dress_id BigInt @id @default(autoincrement()) @db.BigInt
   user_id       BigInt
   dress_id      BigInt
-  dress         dress  @relation(fields: [dress_id], references: [dress_id])
-  user          user   @relation(fields: [user_id], references: [user_id])
+  dress         Dress  @relation(fields: [dress_id], references: [dress_id])
+  user          User   @relation(fields: [user_id], references: [user_id])
+}
+
+model Session {
+  userId    BigInt @unique
+  sessionId String @unique
 }

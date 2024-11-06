@@ -1,22 +1,26 @@
-import swagger from "@elysiajs/swagger";
-import { PrismaClient } from "@prisma/client";
 import { Elysia } from "elysia";
-import API from './module/item'
+import swagger from "@elysiajs/swagger";
 
-const prisma = new PrismaClient();
+import { authService } from "@/services/auth";
+import { userService } from "./services/user";
 
-const users = new Elysia({ prefix: "/users" })
-  .get("/", () => "Users")
-  .get("/profile", "Profile")
-  .get("/settings", "Settings");
-    
+import API from "./module/item";
+
 const app = new Elysia()
   .use(swagger())
-  .use(users)
+  .use(authService)
+  .use(userService)
   .use(API)
-  .get("/", () => "Hello Elysia")
-  .get("/test", "Testing")
-  .listen(3000);
+  .onError(({ error, code }) => {
+    if (code === "NOT_FOUND") {
+      return "Not found";
+    }
+
+    console.error(error);
+    return "Internal server error";
+  })
+  .get("/healthz", "OK!")
+  .listen(3030);
 
 console.log(
   `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
