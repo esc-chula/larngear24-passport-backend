@@ -43,7 +43,7 @@ public class GameController {
 	public void showCurrentIdols() {
 		updateAuraPoint();
 		System.out.println("==================================================");
-		System.out.println("This is the idols in your current group ٩(ˊᗜˋ*)و");
+		System.out.println("These are the idols in your current group ٩(ˊᗜˋ*)و");
 		System.out.println("❀❀❀ You have "+auraPoint+" Aura Point ❀❀❀");
 		for(Idol idol:idols) {
 			System.out.println("-------------------------------------");

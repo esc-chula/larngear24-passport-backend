@@ -99,7 +99,6 @@ public class Level4 implements BaseLevel {
 		gameController.setErrorPoint(gameController.getErrorPoint()+Math.abs(expectedAuraPoint-gameController.getAuraPoint()));
 		gameController.showErrorPoint();
         
-        scanner.close();
 	}
 
 }

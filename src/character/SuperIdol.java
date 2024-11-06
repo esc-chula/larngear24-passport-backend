@@ -25,14 +25,12 @@ public class SuperIdol extends Idol implements Singable, Danceable, Rappable {
 	@Override
 	public void rap() {
 		String rapLine = "Lyrics sharp as daggers, cutting through the lies ⚝";
-		
 		System.out.println(rapLine);
 	}
 
 	@Override
 	public void dance() {
 		String danceLine = "I flow like water, graceful and free ⼺";
-		
 		System.out.println(danceLine);
 	}
 

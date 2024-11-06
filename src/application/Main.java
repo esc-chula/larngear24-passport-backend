@@ -35,7 +35,7 @@ public class Main {
 	private static void postLevel(Scanner scanner) {
 		System.out.println("==================================================");
 		System.out.println("After a long and exhausting journey, the story has come to an end.");
-		System.out.println("The results are ready");
+		System.out.println("The result is ready!");
 		
 		System.out.println("Press any key to continue.");
 		if (scanner.hasNextLine()) {

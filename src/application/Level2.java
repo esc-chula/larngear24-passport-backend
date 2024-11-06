@@ -64,7 +64,7 @@ public class Level2 implements BaseLevel {
 	        Singable idol = (Singable) singingIdols.get(option-1);
 	        idol.setSingPoint(idol.getSingPoint()*2);
 	        
-	        System.out.println("You have chosen "+((Idol) idol).getFullName());
+	        System.out.println("You have chosen "+((Idol) idol).getFullName()+".");
 		}
         gameController.showCurrentIdols();
 		gameController.setErrorPoint(gameController.getErrorPoint()+Math.abs(expectedAuraPoint-gameController.getAuraPoint()));

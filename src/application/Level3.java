@@ -54,7 +54,7 @@ public class Level3 implements BaseLevel {
         if(idol instanceof Danceable) ((Danceable) idol).setDancePoint(((Danceable) idol).getDancePoint()*2);
         if(idol instanceof Rappable) ((Rappable) idol).setRapPoint(((Rappable) idol).getRapPoint()*2);
         
-        System.out.println("You have chosen "+((Idol) idol).getFullName());
+        System.out.println("You have chosen "+((Idol) idol).getFullName()+".");
         
         gameController.showCurrentIdols();
 		gameController.setErrorPoint(gameController.getErrorPoint()+Math.abs(expectedAuraPoint-gameController.getAuraPoint()));
