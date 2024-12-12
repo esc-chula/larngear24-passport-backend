@@ -1,8 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import { Elysia } from "elysia";
 import { getUser, getUserId } from "@/utils/user";
-
-const prisma = new PrismaClient();
+import prisma from "@/libs/prisma"; 
 
 const profileApi = new Elysia({ prefix: "/api" })
   .get("/", () => "API")
@@ -46,8 +44,9 @@ const profileApi = new Elysia({ prefix: "/api" })
       "items":item_user_id
   };
   })
-  .patch("/users/changename", async({ query , userId}) => {
-
+  .patch("/users/changename", async({ query, set , userId}) => {
+    
+    
     try {
       const {newname} = query ;      
 
@@ -59,15 +58,16 @@ const profileApi = new Elysia({ prefix: "/api" })
           username : newname,
         }
       })
-    } catch (e) {
+    } catch (error) {
+      set.status = "Conflict";
       return {
-        "mes": "failed" 
+        message: "failed" 
     };
     }
     
 
     return {
-        "mes": "successfully change name"
+        message: "Successfully change name"
     };
   })
 
