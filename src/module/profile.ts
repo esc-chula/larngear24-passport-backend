@@ -1,21 +1,26 @@
 import { PrismaClient } from "@prisma/client";
 import { Elysia } from "elysia";
+import { getUser, getUserId } from "@/utils/user";
 
 const prisma = new PrismaClient();
 
 const profileApi = new Elysia({ prefix: "/api" })
   .get("/", () => "API")
-  .get("/users", async () => {
-    const userid = BigInt(1);
-    const user = await prisma.user.findFirst({
-      where: {
-        user_id: userid,
-      },
+  .derive(async ({ headers }) => {
+      const auth = headers["authorization"];
+      const sessionId = auth?.startsWith("Bearer ") ? auth.slice(7) : null;
+      const userId = (await getUserId(sessionId)) as bigint;
+  
+      return {
+        userId,
+      };
     })
+  .get("/users", async ({userId}) => {
+    const user =  await getUser(userId);
   
     const item_user = await prisma.user_Item.findMany({
       where: {
-        user_id: userid,
+        user_id: userId,
       },
       select: {
         item_id: true,
@@ -24,7 +29,7 @@ const profileApi = new Elysia({ prefix: "/api" })
     const item_user_id = item_user.map((record) => String(record.item_id));
     const dress_user = await prisma.user_Dress.findMany({
       where: {
-        user_id: userid,
+        user_id: userId,
       },
       select: {
         dress_id: true,
@@ -41,17 +46,14 @@ const profileApi = new Elysia({ prefix: "/api" })
       "items":item_user_id
   };
   })
-  .patch("/users/changename", async({ query }) => {
+  .patch("/users/changename", async({ query , userId}) => {
 
     try {
-      const userid = BigInt(1); 
-      const {newname} = query ;
-      console.log(newname);
-      
+      const {newname} = query ;      
 
       await prisma.user.update({
         where: {
-          user_id: userid,
+          user_id: userId,
         },
         data : {
           username : newname,
