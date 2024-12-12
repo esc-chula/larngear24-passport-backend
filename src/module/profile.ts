@@ -40,6 +40,33 @@ const profileApi = new Elysia({ prefix: "/api" })
       "dresses": dress_user_id,
       "items":item_user_id
   };
-  });
+  })
+  .patch("/users/changename", async({ query }) => {
+
+    try {
+      const userid = BigInt(1); 
+      const {newname} = query ;
+      console.log(newname);
+      
+
+      await prisma.user.update({
+        where: {
+          user_id: userid,
+        },
+        data : {
+          username : newname,
+        }
+      })
+    } catch (e) {
+      return {
+        "mes": "failed" 
+    };
+    }
+    
+
+    return {
+        "mes": "successfully change name"
+    };
+  })
 
 export default profileApi;
