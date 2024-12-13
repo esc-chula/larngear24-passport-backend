@@ -1,9 +1,14 @@
 import { Elysia } from "elysia";
 import { getUser, getUserId } from "@/utils/user";
 import prisma from "@/libs/prisma"; 
+import { authorizationModel } from "@/models/authorization";
+
 
 const profileApi = new Elysia({ prefix: "/api" })
-  .get("/", () => "API")
+  .use(authorizationModel)
+  .guard({
+    headers: "authorizationHeader",
+  })
   .derive(async ({ headers }) => {
       const auth = headers["authorization"];
       const sessionId = auth?.startsWith("Bearer ") ? auth.slice(7) : null;
@@ -13,6 +18,7 @@ const profileApi = new Elysia({ prefix: "/api" })
         userId,
       };
     })
+  .get("/", () => "API")
   .get("/users", async ({userId}) => {
     const user =  await getUser(userId);
   
