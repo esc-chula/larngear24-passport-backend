@@ -4,7 +4,7 @@ import prisma from "@/libs/prisma";
 import { authorizationModel } from "@/models/authorization";
 
 
-const profileApi = new Elysia({ prefix: "/api" })
+const profileApi = new Elysia({ prefix: "/users" })
   .use(authorizationModel)
   .guard({
     headers: "authorizationHeader",
@@ -18,8 +18,7 @@ const profileApi = new Elysia({ prefix: "/api" })
         userId,
       };
     })
-  .get("/", () => "API")
-  .get("/users", async ({userId}) => {
+  .get("/", async ({userId}) => {
     const user =  await getUser(userId);
   
     const item_user = await prisma.user_Item.findMany({
@@ -50,7 +49,7 @@ const profileApi = new Elysia({ prefix: "/api" })
       "items":item_user_id
   };
   })
-  .patch("/users/changename", async({ query, set , userId}) => {
+  .patch("/changename", async({ query, set , userId}) => {
     
     
     try {
