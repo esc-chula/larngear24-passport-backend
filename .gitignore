@@ -12,3 +12,5 @@ trace
 
 .env
 .env.local
+
+docker-compose.yml
