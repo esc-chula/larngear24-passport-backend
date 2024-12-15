@@ -59,5 +59,5 @@ export const authService = new Elysia({ prefix: "/auth" }).use(authModel).post(
   },
   {
     body: "signInBody",
-  }
+  },
 );

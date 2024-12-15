@@ -1,7 +1,7 @@
 import { Elysia } from "elysia";
 
-import { getUser, getUserId } from "@/utils/user";
 import prisma from "@/libs/prisma";
+import { getUser, getUserId } from "@/utils/user";
 
 import { authorizationModel } from "@/models/authorization";
 import { profileModel } from "@/models/profile";
@@ -80,5 +80,5 @@ export const profileService = new Elysia({ prefix: "/user" })
     },
     {
       body: "changeNameBody",
-    }
+    },
   );
