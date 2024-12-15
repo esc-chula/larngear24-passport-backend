@@ -1,6 +1,7 @@
-import { Elysia, t } from "elysia";
+import { Elysia } from "elysia";
 
 import prisma from "@/libs/prisma";
+
 import { authModel } from "@/models/auth";
 
 export const authService = new Elysia({ prefix: "/auth" }).use(authModel).post(
@@ -58,5 +59,5 @@ export const authService = new Elysia({ prefix: "/auth" }).use(authModel).post(
   },
   {
     body: "signInBody",
-  }
+  },
 );

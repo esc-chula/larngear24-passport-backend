@@ -22,7 +22,6 @@ const api = new Elysia({ prefix: "/api" })
       };
   })
 
-
   .get("/", () => "API")
 
   .get("/items", async ({userId}) => {
@@ -53,7 +52,7 @@ const api = new Elysia({ prefix: "/api" })
   .post('/items/redeem', async ({ jwt , query, userId}) => {
     const token = query.token
     const payload = await jwt.verify(token); 
-    const user_id = BigInt(1);
+    //const user_id = BigInt(1);
 
     const format_item = payload.items.map((item) => ({
       item_id : BigInt(item),
@@ -65,7 +64,7 @@ const api = new Elysia({ prefix: "/api" })
     });
 
     const format_u_item = payload.items.map((item) => ({
-      user_id, //change to userId
+      userId, //change to userId
       item_id : BigInt(item),
     }));
     const user_Item = await prisma.user_Item.createMany({
@@ -83,7 +82,7 @@ const api = new Elysia({ prefix: "/api" })
     });
 
     const format_u_dress = payload.dresses.map((dress) => ({
-      user_id, //change to userId
+      userId, //change to userId
       dress_id : BigInt(dress),
     }));
     const user_Dress = await prisma.user_Dress.createMany({
@@ -94,7 +93,7 @@ const api = new Elysia({ prefix: "/api" })
     return {
       "status": "success",
       "data": {
-        "user_id": user_id.toString(), //change to userId
+        "user_id": userId.toString(), //change to userId
         "items": payload.items,
         "dresses": payload.dresses
       }
@@ -109,7 +108,7 @@ const api = new Elysia({ prefix: "/api" })
     const format_item = payload.items.map((item) => BigInt(item));
     const user_Item = await prisma.user_Item.deleteMany({
       where: {
-        user_id: user_id, //change to userId
+        user_id: userId, //change to userId
         item_id: {in: format_item}
       }
     });
@@ -123,7 +122,7 @@ const api = new Elysia({ prefix: "/api" })
     const format_dress = payload.dresses.map((dress) => BigInt(dress));
     const user_Dress = await prisma.user_Dress.deleteMany({
       where: {
-        user_id: user_id, //change to userId
+        user_id: userId, //change to userId
         dress_id: {in: format_dress}
       }
     });
@@ -136,7 +135,7 @@ const api = new Elysia({ prefix: "/api" })
     return {
       "status": "success",
       "data": {
-        "user_id": user_id.toString(), //change to userId
+        "user_id": userId.toString(), //change to userId
         "items": payload.items,
         "dresses": payload.dresses
       }

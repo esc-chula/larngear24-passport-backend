@@ -1,15 +1,15 @@
 import { Elysia } from "elysia";
 import swagger from "@elysiajs/swagger";
 
-import { authService } from "@/services/auth";
-import { userService } from "./services/user";
+import { authService } from "@/modules/auth";
+import { profileService } from "@/modules/profile";
 
-import API from "./module/item";
+import API from "@/modules/item";
 
 const app = new Elysia()
   .use(swagger())
   .use(authService)
-  .use(userService)
+  .use(profileService)
   .use(API)
   .onError(({ error, code }) => {
     if (code === "NOT_FOUND") {
