@@ -1,13 +1,9 @@
-import { PrismaClient } from "@prisma/client";
-import { Elysia } from "elysia";
+import prisma from "@/libs/prisma";
+import { Elysia, t } from "elysia";
 import { getUser, getUserId } from "@/utils/user";
 import { authorizationModel } from "@/models/authorization";
-import { jwt } from '@elysiajs/jwt'
 
-const prisma = new PrismaClient();
-
-const api = new Elysia({ prefix: "/api" })
-
+export const itemService = new Elysia({ prefix: "/item" })
   .use(authorizationModel)
   .guard({
     headers: "authorizationHeader",
@@ -22,9 +18,7 @@ const api = new Elysia({ prefix: "/api" })
       };
   })
 
-  .get("/", () => "API")
-
-  .get("/items", async ({userId}) => {
+  .get("/", async ({userId}) => {
     const user =  await getUser(userId);
     //const userId = BigInt(1)
     const item_user = await prisma.user_Item.findMany({
@@ -40,21 +34,11 @@ const api = new Elysia({ prefix: "/api" })
     return { items: item_user_id };
   })
 
-  .use(
-    jwt({
-        name: 'jwt',
-        secret: process.env.JWT_SECRET,
-        algorithms: ['HS256'],
-        extract: ({ query }) => query.token
-    })
-  )
-
-  .post('/items/redeem', async ({ jwt , query, userId}) => {
-    const token = query.token
-    const payload = await jwt.verify(token); 
+  .post('/redeem',async ({ body, query, userId }) => {
+    const { items, dresses } = body
     //const user_id = BigInt(1);
 
-    const format_item = payload.items.map((item) => ({
+    const format_item = items.map((item) => ({
       item_id : BigInt(item),
       item_name : item.toString(),
     }));
@@ -63,7 +47,7 @@ const api = new Elysia({ prefix: "/api" })
       skipDuplicates: true,
     });
 
-    const format_u_item = payload.items.map((item) => ({
+    const format_u_item = items.map((item) => ({
       userId, //change to userId
       item_id : BigInt(item),
     }));
@@ -72,7 +56,7 @@ const api = new Elysia({ prefix: "/api" })
       skipDuplicates: true,
     });
 
-    const format_dress = payload.dresses.map((dress) => ({
+    const format_dress = dresses.map((dress) => ({
       dress_id : BigInt(dress),
       dress_name : dress.toString(),
     }));
@@ -81,7 +65,7 @@ const api = new Elysia({ prefix: "/api" })
       skipDuplicates: true,
     });
 
-    const format_u_dress = payload.dresses.map((dress) => ({
+    const format_u_dress = dresses.map((dress) => ({
       userId, //change to userId
       dress_id : BigInt(dress),
     }));
@@ -89,26 +73,25 @@ const api = new Elysia({ prefix: "/api" })
       data: format_u_dress,
       skipDuplicates: true,
     });
-
+    
     return {
       "status": "success",
       "data": {
         "user_id": userId.toString(), //change to userId
-        "items": payload.items,
-        "dresses": payload.dresses
+        "items": items,
+        "dresses": dresses
       }
     }
   })
   
-  .delete('/items/redeem', async ({ jwt , query, userId }) => {
-    const token = query.token
-    const payload = await jwt.verify(token); 
-    const user_id = BigInt(1);
+  .delete('/redeem', async ({ body , query, userId }) => {
+    const { items, dresses } = body
+    //const user_id = BigInt(1);
 
-    const format_item = payload.items.map((item) => BigInt(item));
+    const format_item = items.map((item) => BigInt(item));
     const user_Item = await prisma.user_Item.deleteMany({
       where: {
-        user_id: userId, //change to userId
+        userId: user_id, //change to userId
         item_id: {in: format_item}
       }
     });
@@ -119,10 +102,10 @@ const api = new Elysia({ prefix: "/api" })
     });
     
 
-    const format_dress = payload.dresses.map((dress) => BigInt(dress));
+    const format_dress = dresses.map((dress) => BigInt(dress));
     const user_Dress = await prisma.user_Dress.deleteMany({
       where: {
-        user_id: userId, //change to userId
+        userId: user_id, //change to userId
         dress_id: {in: format_dress}
       }
     });
@@ -136,11 +119,8 @@ const api = new Elysia({ prefix: "/api" })
       "status": "success",
       "data": {
         "user_id": userId.toString(), //change to userId
-        "items": payload.items,
-        "dresses": payload.dresses
+        "items": items,
+        "dresses": dresses
       }
     }
-
-  })
-
-export default api;
+  });
