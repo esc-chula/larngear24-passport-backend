@@ -22,20 +22,27 @@ export const itemService = new Elysia({ prefix: "/item" })
     };
   })
 
-  .get("/", async ({ userId }) => {
+  .get("/", async ({ set, userId }) => {
     const user = await getUser(userId);
 
-    const item_user = await prisma.user_Item.findMany({
-      where: {
-        user_id: userId,
-      },
-      select: {
-        item_id: true,
-      },
-    });
+    try {
+      const item_user = await prisma.user_Item.findMany({
+        where: {
+          user_id: userId,
+        },
+        select: {
+          item_id: true,
+        },
+      });
 
-    const item_user_id = item_user.map((record) => String(record.item_id));
-    return { items: item_user_id };
+      const item_user_id = item_user.map((record) => String(record.item_id));
+      return { items: item_user_id };
+    } catch (error) {
+      set.status = "Internal Server Error";
+      return {
+        message: "Internal Server Error",
+      };
+    }
   })
 
   .post(
@@ -43,48 +50,55 @@ export const itemService = new Elysia({ prefix: "/item" })
     async ({ body, set, userId }) => {
       const { items, dresses } = body;
 
-      const format_item = items.map((item) => ({
-        item_id: BigInt(item),
-        item_name: item.toString(),
-      }));
-      const Item = await prisma.item.createMany({
-        data: format_item,
-        skipDuplicates: true,
-      });
+      try {
+        const format_item = items.map((item) => ({
+          item_id: BigInt(item),
+          item_name: item.toString(),
+        }));
+        const Item = await prisma.item.createMany({
+          data: format_item,
+          skipDuplicates: true,
+        });
 
-      const format_u_item = items.map((item) => ({
-        user_id: userId,
-        item_id: BigInt(item),
-      }));
-      const user_Item = await prisma.user_Item.createMany({
-        data: format_u_item,
-        skipDuplicates: true,
-      });
+        const format_u_item = items.map((item) => ({
+          user_id: userId,
+          item_id: BigInt(item),
+        }));
+        const user_Item = await prisma.user_Item.createMany({
+          data: format_u_item,
+          skipDuplicates: true,
+        });
 
-      const format_dress = dresses.map((dress) => ({
-        dress_id: BigInt(dress),
-        dress_name: dress.toString(),
-      }));
-      const Dress = await prisma.dress.createMany({
-        data: format_dress,
-        skipDuplicates: true,
-      });
+        const format_dress = dresses.map((dress) => ({
+          dress_id: BigInt(dress),
+          dress_name: dress.toString(),
+        }));
+        const Dress = await prisma.dress.createMany({
+          data: format_dress,
+          skipDuplicates: true,
+        });
 
-      const format_u_dress = dresses.map((dress) => ({
-        user_id: userId,
-        dress_id: BigInt(dress),
-      }));
-      const user_Dress = await prisma.user_Dress.createMany({
-        data: format_u_dress,
-        skipDuplicates: true,
-      });
+        const format_u_dress = dresses.map((dress) => ({
+          user_id: userId,
+          dress_id: BigInt(dress),
+        }));
+        const user_Dress = await prisma.user_Dress.createMany({
+          data: format_u_dress,
+          skipDuplicates: true,
+        });
 
-      set.status = "OK";
-      return {
-        user_id: userId.toString(),
-        items: items,
-        dresses: dresses,
-      };
+        set.status = "OK";
+        return {
+          user_id: userId.toString(),
+          items: items,
+          dresses: dresses,
+        };
+      } catch (error) {
+        set.status = "Internal Server Error";
+        return {
+          message: "Internal Server Error",
+        };
+      }
     },
     {
       body: "itemRedeemBody",
@@ -97,38 +111,45 @@ export const itemService = new Elysia({ prefix: "/item" })
 
       const user = await getUser(userId);
 
-      const format_item = items.map((item) => BigInt(item));
-      const user_Item = await prisma.user_Item.deleteMany({
-        where: {
-          user: user,
-          item_id: { in: format_item },
-        },
-      });
-      const Item = await prisma.item.deleteMany({
-        where: {
-          item_id: { in: format_item },
-        },
-      });
+      try {
+        const format_item = items.map((item) => BigInt(item));
+        const user_Item = await prisma.user_Item.deleteMany({
+          where: {
+            user: user,
+            item_id: { in: format_item },
+          },
+        });
+        const Item = await prisma.item.deleteMany({
+          where: {
+            item_id: { in: format_item },
+          },
+        });
 
-      const format_dress = dresses.map((dress) => BigInt(dress));
-      const user_Dress = await prisma.user_Dress.deleteMany({
-        where: {
-          user: user,
-          dress_id: { in: format_dress },
-        },
-      });
-      const Dress = await prisma.dress.deleteMany({
-        where: {
-          dress_id: { in: format_dress },
-        },
-      });
+        const format_dress = dresses.map((dress) => BigInt(dress));
+        const user_Dress = await prisma.user_Dress.deleteMany({
+          where: {
+            user: user,
+            dress_id: { in: format_dress },
+          },
+        });
+        const Dress = await prisma.dress.deleteMany({
+          where: {
+            dress_id: { in: format_dress },
+          },
+        });
 
-      set.status = "OK";
-      return {
-        user_id: userId.toString(),
-        items: items,
-        dresses: dresses,
-      };
+        set.status = "OK";
+        return {
+          user_id: userId.toString(),
+          items: items,
+          dresses: dresses,
+        };
+      } catch (error) {
+        set.status = "Internal Server Error";
+        return {
+          message: "Internal Server Error",
+        };
+      }
     },
     {
       body: "itemRedeemBody",
