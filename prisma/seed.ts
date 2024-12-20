@@ -17,6 +17,7 @@ const mockUserData: Prisma.UserCreateInput[] = [
     email: "john@example.com",
     username: "john",
     baan: 1,
+    image : "john_image"
   },
 ];
 

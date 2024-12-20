@@ -31,6 +31,7 @@ export const authService = new Elysia({ prefix: "/auth" }).use(authModel).post(
             username: body.name,
             baan: 999,
             email: body.email,
+            image : body.image,
           },
         });
 
