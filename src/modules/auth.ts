@@ -6,7 +6,7 @@ import { authModel } from "@/models/auth";
 
 export const authService = new Elysia({ prefix: "/auth" }).use(authModel).post(
   "/sign-in",
-  async ({ body, set }) => {
+  async ({ body, set }) => {    
     try {
       const user = await prisma.user.findUnique({
         where: {
