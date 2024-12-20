@@ -7,7 +7,7 @@ import { authModel } from "@/models/auth";
 export const authService = new Elysia({ prefix: "/auth" }).use(authModel).post(
   "/sign-in",
   async ({ body, set }) => {    
-    try {
+    try {      
       const user = await prisma.user.findUnique({
         where: {
           email: body.email,
@@ -31,6 +31,7 @@ export const authService = new Elysia({ prefix: "/auth" }).use(authModel).post(
             google_id : body.id,
           }
         })
+        
 
         if(!memberInfo){
           set.status = "Conflict";
@@ -39,7 +40,7 @@ export const authService = new Elysia({ prefix: "/auth" }).use(authModel).post(
 
         const createdUser = await prisma.user.create({
           data: {
-            username: body.name,
+            username: `${memberInfo.first_name} ${memberInfo.last_name}`,
             baan: parseInt(memberInfo.baan),
             email: body.email,
             image : body.image,

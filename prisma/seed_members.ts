@@ -40,7 +40,7 @@ const mockDevMembersData = [
     "nick_name": "นีร",
     "school": "Chula",
     "baan": "555",
-    "google_id": "xxx"
+    "google_id": "xxxx"
   },
 ];
 
