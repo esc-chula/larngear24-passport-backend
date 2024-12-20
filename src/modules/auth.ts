@@ -26,10 +26,21 @@ export const authService = new Elysia({ prefix: "/auth" }).use(authModel).post(
         }
 
         // TODO: FETCH BAAN FROM SOMEWHERE & VALIDATE USER ROLE
+        const memberInfo = await prisma.members.findUnique({
+          where : {
+            google_id : body.id,
+          }
+        })
+
+        if(!memberInfo){
+          set.status = "Conflict";
+          return { message: "Google Account not allow" };
+        }
+
         const createdUser = await prisma.user.create({
           data: {
             username: body.name,
-            baan: 999,
+            baan: parseInt(memberInfo.baan),
             email: body.email,
             image : body.image,
           },
