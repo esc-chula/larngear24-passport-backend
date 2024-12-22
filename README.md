@@ -39,6 +39,7 @@ docker compose -f ./docker/docker-compose.dev.yaml down
 bunx prisma generate
 bunx prisma migrate dev
 bunx tsx ./prisma/seed.ts
+bunx tsx ./prisma/seed_members.ts # make sure you has baan_lg24_google_id.csv in /prisma folder
 ```
 
 **Note:** You can also run `bunx prisma studio` to open the Prisma Studio to see the database.

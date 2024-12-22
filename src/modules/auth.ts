@@ -6,8 +6,8 @@ import { authModel } from "@/models/auth";
 
 export const authService = new Elysia({ prefix: "/auth" }).use(authModel).post(
   "/sign-in",
-  async ({ body, set }) => {
-    try {
+  async ({ body, set }) => {    
+    try {      
       const user = await prisma.user.findUnique({
         where: {
           email: body.email,
@@ -25,12 +25,24 @@ export const authService = new Elysia({ prefix: "/auth" }).use(authModel).post(
           return { message: "Session ID Already Exists" };
         }
 
-        // TODO: FETCH BAAN FROM SOMEWHERE & VALIDATE USER ROLE
+        const memberInfo = await prisma.members.findUnique({
+          where : {
+            google_id : body.id,
+          }
+        })
+        
+
+        if(!memberInfo){
+          set.status = "Conflict";
+          return { message: "Google Account not allow" };
+        }
+
         const createdUser = await prisma.user.create({
           data: {
-            username: body.name,
-            baan: 999,
+            username: `${memberInfo.first_name} ${memberInfo.last_name}`,
+            baan: parseInt(memberInfo.baan),
             email: body.email,
+            image : body.image,
           },
         });
 

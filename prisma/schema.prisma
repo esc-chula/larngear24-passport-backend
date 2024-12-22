@@ -12,6 +12,7 @@ model User {
   username   String       @db.VarChar(255)
   baan       Int          @db.Integer
   email      String       @unique @db.VarChar(255)
+  imageUrl   String       @default("")
   user_item  User_Item[]
   user_dress User_Dress[]
 }
@@ -47,4 +48,15 @@ model User_Dress {
 model Session {
   userId    BigInt @unique
   sessionId String @unique
+}
+
+model Members {
+  lg_number  String
+  prefix     String
+  first_name String
+  last_name  String
+  nick_name  String
+  school     String
+  baan       String
+  google_id  String @unique
 }
