@@ -12,7 +12,7 @@ model User {
   username   String       @db.VarChar(255)
   baan       Int          @db.Integer
   email      String       @unique @db.VarChar(255)
-  image      String       @default("")
+  imageUrl   String       @default("")
   user_item  User_Item[]
   user_dress User_Dress[]
 }

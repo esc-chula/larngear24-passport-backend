@@ -25,7 +25,6 @@ export const authService = new Elysia({ prefix: "/auth" }).use(authModel).post(
           return { message: "Session ID Already Exists" };
         }
 
-        // TODO: FETCH BAAN FROM SOMEWHERE & VALIDATE USER ROLE
         const memberInfo = await prisma.members.findUnique({
           where : {
             google_id : body.id,
