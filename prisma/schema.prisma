@@ -13,8 +13,9 @@ model User {
   baan       Int
   email      String       @unique @db.VarChar(255)
   messages   Message[]
-  user_dress User_Dress[]
+  imageUrl   String       @default("")
   user_item  User_Item[]
+  user_dress User_Dress[]
 }
 
 model Item {

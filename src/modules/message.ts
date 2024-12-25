@@ -46,6 +46,7 @@ export const messageService = new Elysia({ prefix: "/message" })
       return processedMessages;
 
     } catch (error) {
+      console.error("Error:", error);
       set.status = "Internal Server Error";
       return { message: "Failed to fetch messages" };
     }
@@ -72,6 +73,7 @@ export const messageService = new Elysia({ prefix: "/message" })
         };
         
       } catch (error) {
+        console.error("Error:", error);
         set.status = "Internal Server Error";
         return { message: "Failed to send message" };
       }
@@ -81,9 +83,20 @@ export const messageService = new Elysia({ prefix: "/message" })
 
   .patch(
     "/:id",
-    async ({ params, body, userId, set }) => {
+    async ({ params, body, userId, set}) => {
       const messageId = parseInt(params.id, 10);
       const { message } = body;
+
+      if (isNaN(messageId)) {
+        set.status = "Bad Request"; // BAD REQUEST
+        return { message: "'id' must be a valid numeric value." };
+      }
+  
+      // Validate the message content
+      if (typeof message !== "string" || message.length < 1 || message.length > 1000) {
+        set.status = 400; // BAD REQUEST
+        return { message: "Message must be a string between 1 and 1000 characters." };
+      }
 
       try {
         const existingMessage = await prisma.message.findFirst({
@@ -95,11 +108,6 @@ export const messageService = new Elysia({ prefix: "/message" })
         if (!existingMessage) {
           set.status = "Forbidden";
           return { message: "You are not authorized to edit this message" };
-        }
-
-        if (typeof message !== 'string' || message.length < 1 || message.length > 500) {
-          set.status = "Bad Request";
-          return { message: "Invalid message content" };
         }
 
         const updatedMessage = await prisma.message.update({
@@ -114,6 +122,7 @@ export const messageService = new Elysia({ prefix: "/message" })
           user_id: updatedMessage.user_id.toString(),
         };
       } catch (error) {
+        console.error("Error:", error);
         set.status = "Internal Server Error";
         return { message: "Failed to edit message" };
       }
@@ -146,6 +155,7 @@ export const messageService = new Elysia({ prefix: "/message" })
       set.status = "OK";
       return { message: "Message deleted successfully" };
     } catch (error) {
+      console.error("Error:", error);
       set.status = "Internal Server Error";
       return { message: "Failed to delete message" };
     }
