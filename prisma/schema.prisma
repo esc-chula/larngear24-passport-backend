@@ -58,3 +58,14 @@ model Message {
   createdAt  DateTime @default(now())
   user       User     @relation(fields: [user_id], references: [user_id])
 }
+
+model Members {
+  lg_number  String
+  prefix     String
+  first_name String
+  last_name  String
+  nick_name  String
+  school     String
+  baan       String
+  google_id  String @unique
+}

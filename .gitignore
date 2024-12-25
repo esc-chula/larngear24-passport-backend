@@ -14,3 +14,5 @@ trace
 .env.local
 
 docker-compose.yml
+
+prisma/bann_lg24_google_id.csv
