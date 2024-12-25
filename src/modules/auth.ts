@@ -6,8 +6,8 @@ import { authModel } from "@/models/auth";
 
 export const authService = new Elysia({ prefix: "/auth" }).use(authModel).post(
   "/sign-in",
-  async ({ body, set }) => {    
-    try {      
+  async ({ body, set }) => {
+    try {
       const user = await prisma.user.findUnique({
         where: {
           email: body.email,
@@ -26,13 +26,12 @@ export const authService = new Elysia({ prefix: "/auth" }).use(authModel).post(
         }
 
         const memberInfo = await prisma.members.findUnique({
-          where : {
-            google_id : body.id,
-          }
-        })
-        
+          where: {
+            google_id: body.id,
+          },
+        });
 
-        if(!memberInfo){
+        if (!memberInfo) {
           set.status = "Conflict";
           return { message: "Google Account not allow" };
         }
@@ -42,7 +41,7 @@ export const authService = new Elysia({ prefix: "/auth" }).use(authModel).post(
             username: `${memberInfo.first_name} ${memberInfo.last_name}`,
             baan: parseInt(memberInfo.baan),
             email: body.email,
-            image : body.image,
+            image: body.image,
           },
         });
 

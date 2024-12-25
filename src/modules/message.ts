@@ -1,13 +1,13 @@
 import { Elysia } from "elysia";
 
 import prisma from "@/libs/prisma";
-import { getUser, getUserId } from "@/utils/user";
-import { messageModel } from "@/models/message";
 import { authorizationModel } from "@/models/authorization";
+import { messageModel } from "@/models/message";
+import { getUserId } from "@/utils/user";
 
 export const messageService = new Elysia({ prefix: "/message" })
-  .use(authorizationModel) 
-  .use(messageModel) 
+  .use(authorizationModel)
+  .use(messageModel)
   .guard({
     headers: "authorizationHeader",
   })
@@ -25,16 +25,16 @@ export const messageService = new Elysia({ prefix: "/message" })
     try {
       const messages = await prisma.message.findMany({
         orderBy: {
-            createdAt: "desc", 
-          },
-          include: {
-            user: {
-              select: {
-                username: true,
-                baan: true,
-              },
+          createdAt: "desc",
+        },
+        include: {
+          user: {
+            select: {
+              username: true,
+              baan: true,
             },
           },
+        },
       });
 
       const processedMessages = messages.map((message) => ({
@@ -42,9 +42,8 @@ export const messageService = new Elysia({ prefix: "/message" })
         message_id: message.message_id.toString(),
         user_id: message.user_id.toString(),
       }));
-  
-      return processedMessages;
 
+      return processedMessages;
     } catch (error) {
       console.error("Error:", error);
       set.status = "Internal Server Error";
@@ -71,19 +70,18 @@ export const messageService = new Elysia({ prefix: "/message" })
           message_id: new_message.message_id.toString(),
           user_id: new_message.user_id.toString(),
         };
-        
       } catch (error) {
         console.error("Error:", error);
         set.status = "Internal Server Error";
         return { message: "Failed to send message" };
       }
     },
-    { body: "sendMessageBody" }
+    { body: "sendMessageBody" },
   )
 
   .patch(
     "/:id",
-    async ({ params, body, userId, set}) => {
+    async ({ params, body, userId, set }) => {
       const messageId = parseInt(params.id, 10);
       const { message } = body;
 
@@ -91,11 +89,17 @@ export const messageService = new Elysia({ prefix: "/message" })
         set.status = "Bad Request"; // BAD REQUEST
         return { message: "'id' must be a valid numeric value." };
       }
-  
+
       // Validate the message content
-      if (typeof message !== "string" || message.length < 1 || message.length > 1000) {
+      if (
+        typeof message !== "string" ||
+        message.length < 1 ||
+        message.length > 1000
+      ) {
         set.status = 400; // BAD REQUEST
-        return { message: "Message must be a string between 1 and 1000 characters." };
+        return {
+          message: "Message must be a string between 1 and 1000 characters.",
+        };
       }
 
       try {
@@ -127,7 +131,7 @@ export const messageService = new Elysia({ prefix: "/message" })
         return { message: "Failed to edit message" };
       }
     },
-    { body: "sendMessageBody" }
+    { body: "sendMessageBody" },
   )
   .delete("/:id", async ({ params, userId, set }) => {
     const messageId = parseInt(params.id, 10);
