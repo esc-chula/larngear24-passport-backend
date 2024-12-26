@@ -33,14 +33,24 @@ function csvToMembersData(csv: string) {
 
 const mockDevMembersData = [
   {
-    "lg_number" : "LG_Z00001",
+    "lg_number" : "LG_DEV001",
     "prefix": "นางสาว",
     "first_name": "ณภัทร",
     "last_name": "เสรีรักษ์",
     "nick_name": "นีร",
     "school": "Chula",
-    "baan": "555",
-    "google_id": "xxxx"
+    "baan": "1",
+    "google_id": "117525997933765874261"
+  },
+  {
+    "lg_number" : "LG_DEV002",
+    "prefix": "นาย",
+    "first_name": "พี่โจ้",
+    "last_name": "jojo",
+    "nick_name": "jo",
+    "school": "Chula",
+    "baan": "1",
+    "google_id": "113926223118812005219"
   },
 ];
 
