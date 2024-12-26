@@ -6,7 +6,7 @@ import { authModel } from "@/models/auth";
 
 export const authService = new Elysia({ prefix: "/auth" }).use(authModel).post(
   "/sign-in",
-  async ({ body, set }) => {    
+  async ({ body, set }) => {
     try {
       const user = await prisma.user.findUnique({
         where: {
@@ -24,7 +24,7 @@ export const authService = new Elysia({ prefix: "/auth" }).use(authModel).post(
           set.status = "Conflict";
           return { message: "Session ID Already Exists" };
         }
-        
+
         const memberInfo = await prisma.members.findUnique({
           where: {
             google_id: body.id,

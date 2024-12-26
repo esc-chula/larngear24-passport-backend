@@ -32,7 +32,7 @@ export const messageService = new Elysia({ prefix: "/message" })
             select: {
               username: true,
               baan: true,
-              imageUrl : true
+              imageUrl: true,
             },
           },
         },
