@@ -48,7 +48,7 @@ export const profileService = new Elysia({ prefix: "/user" })
       user_id: user?.user_id.toString(),
       username: user?.username,
       baan: user?.baan.toString(),
-      image: user?.image,
+      image: user?.imageUrl,
       email: user?.email,
       dresses: dress_user_id,
       items: item_user_id,

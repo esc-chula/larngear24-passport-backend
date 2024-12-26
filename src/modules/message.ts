@@ -55,7 +55,7 @@ export const messageService = new Elysia({ prefix: "/message" })
   .post(
     "/",
     async ({ body, userId, set }) => {
-      const { message } = body;
+      const { message } = body;      
 
       try {
         const new_message = await prisma.message.create({

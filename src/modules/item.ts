@@ -49,7 +49,7 @@ export const itemService = new Elysia({ prefix: "/item" })
     "/redeem",
     async ({ body, set, userId }) => {
       const { items, dresses } = body;
-
+      
       try {
         const format_item = items.map((item) => ({
           item_id: BigInt(item),
