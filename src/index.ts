@@ -1,13 +1,15 @@
-import { Elysia } from "elysia";
+import cors from "@elysiajs/cors";
 import swagger from "@elysiajs/swagger";
+import { Elysia } from "elysia";
 
 import { authService } from "@/modules/auth";
-import { profileService } from "@/modules/profile";
 import { itemService } from "@/modules/item";
+import { profileService } from "@/modules/profile";
 import { messageService } from "./modules/message";
 
 const app = new Elysia()
   .use(swagger())
+  .use(cors()) // TODO: Allow CORS by Top level domain
   .use(authService)
   .use(profileService)
   .use(itemService)
@@ -24,5 +26,5 @@ const app = new Elysia()
   .listen(3030);
 
 console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
+  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
 );
