@@ -16,7 +16,7 @@ const app = new Elysia()
     fileLogger({
       file: "./out.log",
       autoLogging: true,
-    }).derive({ as: "global" }, ({ log, ...rest }) => ({
+    }).derive(({ log, ...rest }) => ({
       fileLogger: log,
       ...rest,
     })),
