@@ -30,6 +30,6 @@ COPY --from=build /app/prisma/ ./prisma
 
 ENV NODE_ENV=production
 
-EXPOSE 3000
+EXPOSE 3030
 
 CMD ["bun", "run" , "start:migrate:prod"]

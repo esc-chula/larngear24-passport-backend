@@ -9,8 +9,6 @@ import { fileLogger } from "@bogeychan/elysia-logger";
 import { log } from "./libs/prisma";
 import { messageService } from "./modules/message";
 
-const port = Bun.env.PORT || 3030;
-
 const app = new Elysia()
   .use(
     fileLogger({
@@ -38,6 +36,6 @@ const app = new Elysia()
     return "Internal server error";
   })
   .get("/healthz", "OK!")
-  .listen(port);
+  .listen(3030);
 
 log.info(`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`);

@@ -57,7 +57,7 @@ bun install
 bun run dev
 ```
 
-Open <http://localhost:3000/> with your browser to see the result.
+Open <http://localhost:3030/> with your browser to see the result.
 
 ### To delete database and start from scratch
 
@@ -76,13 +76,13 @@ docker buildx build -t lg-passport-backend:0.0.1 .
 ```
 
 ```bash
-docker run --name backend -p 3000:<PORT> -e PORT=<PORT> -e DATABASE_URL="postgresql://<POSTGRES_USER>:<POSTGRES_PASSWORD>@<DB_HOSTNAME>:5432/<DATABASE_NAME>?schema=public" lg-passport-backend:0.0.1
+docker run --name backend -p <PORT>:3030 -e DATABASE_URL="postgresql://<POSTGRES_USER>:<POSTGRES_PASSWORD>@<DB_HOSTNAME>:5432/<DATABASE_NAME>?schema=public" lg-passport-backend:0.0.1
 ```
 
 If docker is run outside of the network of the database, make sure to add the container to the network with `--network`. Thus, the run command will look like:
 
 ```bash
-docker run --name backend -p 3000:<PORT> -e PORT=<PORT> -e DATABASE_URL="postgresql://<POSTGRES_USER>:<POSTGRES_PASSWORD>@<DB_HOSTNAME>:5432/<DATABASE_NAME>?schema=public" lg-passport-backend:0.0.1
+docker run --name backend -p <PORT>:3030 --network <NETWORK_NAME> -e DATABASE_URL="postgresql://<POSTGRES_USER>:<POSTGRES_PASSWORD>@<DB_HOSTNAME>:5432/<DATABASE_NAME>?schema=public" lg-passport-backend:0.0.1
 ```
 
 ### Seed the database
