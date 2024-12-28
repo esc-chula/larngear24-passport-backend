@@ -57,7 +57,7 @@ bun install
 bun run dev
 ```
 
-Open <http://localhost:3000/> with your browser to see the result.
+Open <http://localhost:3030/> with your browser to see the result.
 
 ### To delete database and start from scratch
 
@@ -66,3 +66,25 @@ docker compose -f ./docker/docker-compose.dev.yaml down
 docker volume rm lg24-passport-backend_pg-data lg24-passport-backend_pgadmin-data
 docker compose -f ./docker/docker-compose.dev.yaml up -d
 ```
+
+## Production
+
+### To build and run docker container locally
+
+```bash
+docker buildx build -t lg-passport-backend:0.0.1 .
+```
+
+```bash
+docker run --name backend -p <PORT>:3030 -e DATABASE_URL="postgresql://<POSTGRES_USER>:<POSTGRES_PASSWORD>@<DB_HOSTNAME>:5432/<DATABASE_NAME>?schema=public" lg-passport-backend:0.0.1
+```
+
+If docker is run outside of the network of the database, make sure to add the container to the network with `--network`. Thus, the run command will look like:
+
+```bash
+docker run --name backend -p <PORT>:3030 --network <NETWORK_NAME> -e DATABASE_URL="postgresql://<POSTGRES_USER>:<POSTGRES_PASSWORD>@<DB_HOSTNAME>:5432/<DATABASE_NAME>?schema=public" lg-passport-backend:0.0.1
+```
+
+### Seed the database
+
+There are 3 tables that need to be seeded: `Members`, `Dress`, and `Items`. To seed the database, open the pg admin and import the data from the csv files and upload them to the database directly.
