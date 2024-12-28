@@ -1,6 +1,10 @@
+import { createPinoLogger } from "@bogeychan/elysia-logger";
 import { PrismaClient } from "@prisma/client";
 
+export const log = createPinoLogger({ level: "info", timestamp: true });
+
 const prismaClientSingleton = () => {
+  log.info(`Connection Prisma to database: ${Bun.env.DATABASE_URL}`);
   return new PrismaClient();
 };
 
