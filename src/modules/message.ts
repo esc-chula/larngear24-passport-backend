@@ -21,7 +21,7 @@ export const messageService = new Elysia({ prefix: "/message" })
     };
   })
 
-  .get("/", async ({ set }) => {
+  .get("/", async ({ set, userId }) => {
     try {
       const messages = await prisma.message.findMany({
         orderBy: {
@@ -42,6 +42,7 @@ export const messageService = new Elysia({ prefix: "/message" })
         ...message,
         message_id: message.message_id.toString(),
         user_id: message.user_id.toString(),
+        is_owner : userId == message.user_id,
       }));
 
       return processedMessages;
